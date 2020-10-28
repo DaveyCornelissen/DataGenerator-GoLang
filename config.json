@@ -1,0 +1,56 @@
+{
+  "objects": [
+    {
+      "root_key": "mouseclick",
+      "values": [
+        "left",
+        "right"
+      ],
+      "child_objects": [
+        {
+          "column": "Duration",
+          "value": "*",
+          "type": "float32"
+        },
+        {
+          "column": "hold",
+          "value": "0.5-1.5",
+          "type": "float32"
+        },
+        {
+          "column": "release",
+          "value": "0.1-2.0",
+          "type": "float32"
+        }
+      ],
+      "total": 5000
+    },
+    {
+      "root_key": "keyboard-click",
+      "values": [
+        "N",
+        "Enter"
+      ],
+      "child_objects": [
+        {
+          "column": "Duration",
+          "value": "*",
+          "type": "float32"
+        },
+        {
+          "column": "Event",
+          "value": "*",
+          "type": "bool"
+        },
+        {
+          "column": "key-code",
+          "value": "*",
+          "type": "string"
+        }
+      ],
+      "total": 5000
+    }
+  ],
+  "file_name": "test",
+  "file_format": "TSV"
+}
