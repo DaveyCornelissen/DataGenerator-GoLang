@@ -1,8 +1,8 @@
 package main
 
 import (
+	. "dataGenerator/intern/Utils/Handlers"
 	. "dataGenerator/intern/models"
-	"fmt"
 )
 import FileService "dataGenerator/intern/services"
 import MockService "dataGenerator/intern/services"
@@ -18,7 +18,7 @@ func main() {
 
 }
 
-func serialize(rootObjs []Object) interface{} {
+func serialize(rootObjs []Object) {
 
 	var _rootList []RootColumn
 	var _childList []ChildColumn
@@ -39,12 +39,12 @@ func serialize(rootObjs []Object) interface{} {
 					RootId: i,
 					Name:   childObj.Key,
 				}
-				_childColumn.Value = MockService.Generate(childObj)
+				MockService.Generate(childObj, &_childColumn)
 				_childList = append(_childList, _childColumn)
 			}
 
 		} else {
-			fmt.Println("Error no Root Key or ChildObject provided!")
+			CheckError("Error no Root Key or ChildObject provided!")
 		}
 
 	}

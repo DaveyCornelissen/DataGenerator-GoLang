@@ -3,12 +3,12 @@ package services
 import (
 	"encoding/csv"
 	"encoding/json"
-	"log"
 	"os"
 	"time"
 )
 
 import . "dataGenerator/intern/models"
+import . "dataGenerator/intern/Utils/Handlers"
 
 func GenerateFile(extensionType string, filename string) {
 	switch extensionType {
@@ -22,7 +22,7 @@ func generateTSV(filename string) {
 	cTime := time.Now().String()
 
 	file, err := os.Create(filename + cTime + ".tsv")
-	checkError("Cannot create file", err)
+	CheckError("Cannot create file", err)
 	defer file.Close()
 
 	writer := csv.NewWriter(file)
@@ -41,7 +41,7 @@ func LoadConfiguration(file string) Configuration {
 	configFile, err := os.Open(file)
 
 	if err != nil {
-		checkError("cannont read file", err)
+		CheckError("cannont read file", err)
 	}
 	defer configFile.Close()
 
@@ -50,8 +50,4 @@ func LoadConfiguration(file string) Configuration {
 	return con
 }
 
-func checkError(message string, err error) {
-	if err != nil {
-		log.Fatal(message, err)
-	}
-}
+
