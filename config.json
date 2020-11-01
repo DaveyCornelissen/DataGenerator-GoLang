@@ -51,6 +51,6 @@
       "total": 5000
     }
   ],
-  "file_name": "test",
+  "file_name": "output/test",
   "file_format": "TSV"
 }

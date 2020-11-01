@@ -7,22 +7,22 @@ import (
 )
 import "strings"
 import . "dataGenerator/intern/Utils/Handlers"
+
 const (
 	random = "*"
 	length = "-"
 )
 
-func Generate(childObject ChildObject, columnObject *ChildColumn) {
+func GenerateMockData(childObject ChildObject) string {
 
 	//Random attr
 	if strings.Contains(childObject.Value, random) {
 		switch childObject.Type {
 		case "bool":
-			columnObject.Value = strconv.FormatBool(randBoolean())
+			return strconv.FormatBool(randBoolean())
 		case "float":
-			columnObject.Value = floatToString(rand.Float64())
+			return floatToString(rand.Float64())
 		}
-		return
 	}
 
 	//length between certain value
@@ -30,16 +30,15 @@ func Generate(childObject ChildObject, columnObject *ChildColumn) {
 		switch childObject.Type {
 		case "float":
 			numbers := strings.Split(childObject.Value, length)
-			columnObject.Value = floatToString(randFloat(numbers))
+			return floatToString(randFloat(numbers))
 		case "int":
 			numbers := strings.Split(childObject.Value, length)
-			columnObject.Value = strconv.Itoa(randInt(numbers))
+			return strconv.Itoa(randInt(numbers))
 		case "string":
-			columnObject.Value = randString(stringToInt(childObject.Value))
+			return randString(stringToInt(childObject.Value))
 		}
-	} else {
-		columnObject.Value = childObject.Value
 	}
+	return childObject.Value
 }
 
 func randBoolean() bool {
@@ -57,7 +56,7 @@ func randString(n int) string {
 
 func randFloat(numbers []string) float64 {
 	min := stringToFloat(numbers[0])
-	max := stringToFloat(numbers[0])
+	max := stringToFloat(numbers[1])
 
 	return min + rand.Float64()*(max-min)
 }
@@ -71,13 +70,18 @@ func randInt(numbers []string) int {
 
 func stringToInt(input_num string) int {
 	i, err := strconv.Atoi(input_num)
-	CheckError("could not convert type:", err)
+	if err != nil {
+		CheckError("could not convert type:", err)
+	}
 	return i
 }
 
 func stringToFloat(input_num string) float64 {
 	f, err := strconv.ParseFloat(input_num, 64)
-	CheckError("could not convert type:", err)
+	if err != nil {
+		CheckError("could not convert type:", err)
+	}
+
 	return f
 }
 
