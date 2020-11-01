@@ -23,7 +23,7 @@
           "type": "float"
         }
       ],
-      "total": 5000
+      "total": 50000
     },
     {
       "root_key": "keyboard-click",
@@ -48,9 +48,9 @@
           "type": "string"
         }
       ],
-      "total": 5000
+      "total": 50000
     }
   ],
-  "file_name": "output/test",
+  "file_name": "output/mock_data",
   "file_format": "TSV"
 }

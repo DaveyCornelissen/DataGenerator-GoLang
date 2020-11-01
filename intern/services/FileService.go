@@ -11,8 +11,8 @@ import (
 import . "dataGenerator/intern/models"
 import . "dataGenerator/intern/Utils/Handlers"
 
+//can be expanded with for instance protocol buffer only add new case and method
 func GenerateFile(data []Object, extensionType string, filename string) {
-
 	switch extensionType {
 	case "TSV":
 		t := serializeTsv(data)
@@ -64,23 +64,22 @@ func generateTsv(filename string, table *Table) {
 	tableName := table.Headers[0]
 	cTime := time.Now()
 	newFileName := filename + "-" + tableName + "-" + cTime.Format("2006-01-02") + ".tsv"
-
 	file, err := os.Create(newFileName)
 	if err != nil {
 		CheckError("Cannot create file", err)
 	}
-	defer file.Close()
 
-	writer := csv.NewWriter(file)
-	writer.Comma = '\t'
-	defer writer.Flush()
+	tsvWriter := csv.NewWriter(file)
+	tsvWriter.Comma = '\t'
+	defer tsvWriter.Flush()
+	defer file.Close()
 
 	var rows [][]string
 	rows = append(rows, table.Headers)
 	rows = append(rows, table.Columns...)
 
 	for _, v := range rows {
-		err := writer.Write(v)
+		err := tsvWriter.Write(v)
 		if err != nil {
 			CheckError("Cannot write to file", err)
 		}
