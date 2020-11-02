@@ -1,6 +1,7 @@
 package services
 
 import (
+	"archive/zip"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -16,12 +17,11 @@ func GenerateFile(data []Object, extensionType string, filename string) {
 	switch extensionType {
 	case "TSV":
 		t := serializeTsv(data)
-		for _, tableData := range t {
-			generateTsv(filename, tableData)
-		}
+		generateTsv(filename, t)
 	}
 }
 
+//serialize the raw objects to usable tsv format
 func serializeTsv(rootObjs []Object) []*Table {
 
 	var _rootList []*Table
@@ -59,29 +59,37 @@ func serializeTsv(rootObjs []Object) []*Table {
 	fmt.Printf("Done! Total RootColumns: %d  Total ChildColumns: %d \n", len(_rootList), _totalChildrenCount)
 	return _rootList
 }
-
-func generateTsv(filename string, table *Table) {
-	tableName := table.Headers[0]
+//Generate the actual files and compress them into zip
+func generateTsv(filename string, tables []*Table) {
 	cTime := time.Now()
-	newFileName := filename + "-" + tableName + "-" + cTime.Format("2006-01-02") + ".tsv"
-	file, err := os.Create(newFileName)
+	zipFileName := filename + "-" + cTime.Format("2006-01-02") + ".zip"
+	file, err := os.Create(zipFileName)
 	if err != nil {
 		CheckError("Cannot create file", err)
 	}
-
-	tsvWriter := csv.NewWriter(file)
-	tsvWriter.Comma = '\t'
-	defer tsvWriter.Flush()
+	zipArchive := zip.NewWriter(file)
+	defer zipArchive.Flush()
+	defer zipArchive.Close()
 	defer file.Close()
 
-	var rows [][]string
-	rows = append(rows, table.Headers)
-	rows = append(rows, table.Columns...)
+	for _, t := range tables {
+		tableName := t.Headers[0]
+		tsvFileName := filename + "-" + tableName + "-" + cTime.Format("2006-01-02") + ".tsv"
 
-	for _, v := range rows {
-		err := tsvWriter.Write(v)
-		if err != nil {
-			CheckError("Cannot write to file", err)
+		zipWriter, _ := zipArchive.Create(tsvFileName)
+		tsvWriter := csv.NewWriter(zipWriter)
+		tsvWriter.Comma = '\t'
+		defer tsvWriter.Flush()
+
+		var rows [][]string
+		rows = append(rows, t.Headers)
+		rows = append(rows, t.Columns...)
+
+		for _, v := range rows {
+			err := tsvWriter.Write(v)
+			if err != nil {
+				CheckError("Cannot write to file", err)
+			}
 		}
 	}
 }

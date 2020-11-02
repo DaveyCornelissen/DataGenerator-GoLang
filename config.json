@@ -8,17 +8,17 @@
       ],
       "child_objects": [
         {
-          "column": "Duration",
+          "child_key": "duration",
           "value": "*",
           "type": "float"
         },
         {
-          "column": "hold",
+          "child_key": "hold",
           "value": "0.5-1.5",
           "type": "float"
         },
         {
-          "column": "release",
+          "child_key": "release",
           "value": "0.1-2.0",
           "type": "float"
         }
@@ -33,17 +33,17 @@
       ],
       "child_objects": [
         {
-          "column": "Duration",
+          "child_key": "duration",
           "value": "*",
           "type": "float"
         },
         {
-          "column": "Event",
+          "child_key": "event",
           "value": "*",
           "type": "bool"
         },
         {
-          "column": "key-code",
+          "child_key": "key-code",
           "value": "10",
           "type": "string"
         }
